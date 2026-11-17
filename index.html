@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SickPick.org — Called in Sick? Pick Your Replacement</title>
+<meta name="description" content="SickPick.org lets managers pick experienced local replacements for unexpected sick calls or planned leave. Job seekers post resume-style profiles. Geolocation matching + Spanish toggle. No high staffing markups.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow: #FFD54F;
+    --yellow-dark: #FFC107;
+    --dark: #1a1a1a;
+    --gray: #4a4a4a;
+    --light: #fafafa;
+    --card: #ffffff;
+    --border: #e8e8e8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    line-height: 1.6;
+  }
+  header {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo-img {
+    height: 42px;
+    width: auto;
+  }
+  .lang-toggle {
+    background: var(--yellow);
+    border: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  .hero {
+    padding: 32px 20px 20px;
+    text-align: center;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .hero h1 {
+    font-size: clamp(2.1rem, 6vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  .hero h1 em { color: var(--yellow-dark); font-style: normal; }
+  .hero p.lead {
+    font-size: 1.12rem;
+    color: var(--gray);
+    max-width: 680px;
+    margin: 0 auto 24px;
+  }
+  .hero-img {
+    width: 100%;
+    max-width: 920px;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    margin: 16px auto;
+    display: block;
+  }
+  .cta-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 20px 0 36px;
+  }
+  .btn {
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary {
+    background: var(--yellow);
+    color: var(--dark);
+    box-shadow: 0 4px 14px rgba(255,213,79,0.4);
+  }
+  .btn-secondary {
+    background: #fff;
+    color: var(--dark);
+    border: 2px solid var(--border);
+  }
+  section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 20px;
+  }
+  h2 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  .section-sub {
+    text-align: center;
+    color: var(--gray);
+    max-width: 640px;
+    margin: 0 auto 28px;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 16px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  }
+  .card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+  }
+  .mock-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 32px;
+    align-items: center;
+    margin-top: 20px;
+  }
+  .mock-img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.1);
+  }
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .feature {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+  .feature strong { display: block; margin-bottom: 6px; font-size: 1.05rem; }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+  .price-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 24px;
+    text-align: center;
+    position: relative;
+  }
+  .price-card.featured {
+    border: 2px solid var(--yellow-dark);
+    transform: scale(1.02);
+  }
+  .price {
+    font-size: 2.4rem;
+    font-weight: 800;
+    margin: 12px 0;
+  }
+  .price span { font-size: 1rem; font-weight: 500; color: var(--gray); }
+  footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gray);
+    border-top: 1px solid var(--border);
+    margin-top: 20px;
+    font-size: 0.9rem;
+  }
+  .geo-note {
+    background: #fff8e1;
+    border-left: 4px solid var(--yellow-dark);
+    padding: 16px 20px;
+    border-radius: 8px;
+    margin: 24px auto;
+    max-width: 720px;
+    text-align: left;
+  }
+  @media (max-width: 780px) {
+    .mock-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 2.1rem; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <img src="imagine_images/CYDvc.jpg" alt="SickPick.org logo" class="logo-img">
+  <button class="lang-toggle" id="langBtn">ES</button>
+</header>
+
+<div class="hero">
+  <h1 data-en="Called in sick?<br>Pick the right replacement." data-es="¿Llamó enfermo?<br>Elige el reemplazo correcto.">Called in sick?<br>Pick the right replacement.</h1>
+  <p class="lead" data-en="Managers browse local workers by distance and experience, then pick the best match for unexpected call-ins or planned sick leave. Job seekers post resume-style profiles. Direct, fast, no high staffing markups." data-es="Los gerentes exploran trabajadores locales por distancia y experiencia, luego eligen la mejor coincidencia para llamadas inesperadas o bajas planificadas. Los buscadores publican perfiles tipo currículum. Directo, rápido, sin altos márgenes de personal.">
+    Managers browse local workers by distance and experience, then pick the best match for unexpected call-ins or planned sick leave. Job seekers post resume-style profiles. Direct, fast, no high staffing markups.
+  </p>
+  <img src="imagine_images/Xd6f2.jpg" alt="Yellow tag board of available workers" class="hero-img">
+  <div class="cta-row">
+    <a href="#seekers" class="btn btn-primary" data-en="Create Seeker Profile" data-es="Crear perfil de buscador">Create Seeker Profile</a>
+    <a href="#managers" class="btn btn-secondary" data-en="Browse Workers to Pick" data-es="Explorar trabajadores para elegir">Browse Workers to Pick</a>
+  </div>
+</div>
+
+<section>
+  <h2 data-en="How SickPick Works" data-es="Cómo funciona SickPick">How SickPick Works</h2>
+  <p class="section-sub" data-en="Two paths. Same board of yellow tags. Pick by experience and proximity." data-es="Dos caminos. El mismo tablero de etiquetas amarillas. Elige por experiencia y proximidad.">Two paths. Same board of yellow tags. Pick by experience and proximity.</p>
+  <div class="cards">
+    <div class="card">
+      <h3 data-en="Unexpected Call-In" data-es="Llamada inesperada">Unexpected Call-In</h3>
+      <p data-en="Someone called out this morning? Open the board, filter by role and miles, and pick a worker whose experience matches the shift in minutes." data-es="¿Alguien llamó enfermo esta mañana? Abre el tablero, filtra por puesto y millas, y elige un trabajador cuya experiencia coincida con el turno en minutos.">
+        Someone called out this morning? Open the board, filter by role and miles, and pick a worker whose experience matches the shift in minutes.
+      </p>
+    </div>
+    <div class="card">
+      <h3 data-en="Planned Sick Leave" data-es="Baja planificada">Planned Sick Leave</h3>
+      <p data-en="Post the date allowed by state and employer rules. Line up a replacement in advance instead of scrambling the morning of." data-es="Publica la fecha permitida por las reglas estatales y de la empresa. Prepara un reemplazo con anticipación en lugar de improvisar la mañana del día.">
+        Post the date allowed by state and employer rules. Line up a replacement in advance instead of scrambling the morning of.
+      </p>
+    </div>
+    <div class="card">
+      <h3 data-en="Pick by Experience" data-es="Elige por experiencia">Pick by Experience</h3>
+      <p data-en="Profiles read like short resumes: years in role, skills, certifications, and reliability notes. Choose someone who can actually step in." data-es="Los perfiles se leen como currículums cortos: años en el puesto, habilidades, certificaciones y notas de confiabilidad. Elige a alguien que realmente pueda entrar.">
+        Profiles read like short resumes: years in role, skills, certifications, and reliability notes. Choose someone who can actually step in.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="employer-cta" style="background:#fff8e1; border-top:1px solid #ffe082; border-bottom:1px solid #ffe082;">
+  <h2 data-en="Stop the Snowball" data-es="Detén el efecto bola de nieve">Stop the Snowball</h2>
+  <p class="section-sub" data-en="One unfilled sick call-in rarely stays one problem." data-es="Una llamada de enfermedad sin cubrir rara vez se queda en un solo problema.">One unfilled sick call-in rarely stays one problem.</p>
+  <div class="cards">
+    <div class="card">
+      <h3 data-en="Lower Productivity" data-es="Menor productividad">Lower Productivity</h3>
+      <p data-en="The shift runs short. Tasks pile up. Output drops immediately — and the rest of the team has to absorb the gap." data-es="El turno queda corto. Las tareas se acumulan. La producción cae de inmediato — y el resto del equipo tiene que absorber el vacío.">The shift runs short. Tasks pile up. Output drops immediately — and the rest of the team has to absorb the gap.</p>
+    </div>
+    <div class="card">
+      <h3 data-en="Low Morale" data-es="Baja moral">Low Morale</h3>
+      <p data-en="Reliable workers cover for others again. Resentment builds. The next call-in becomes more likely." data-es="Los trabajadores confiables cubren a otros otra vez. Crece el resentimiento. La próxima llamada se vuelve más probable.">Reliable workers cover for others again. Resentment builds. The next call-in becomes more likely.</p>
+    </div>
+    <div class="card">
+      <h3 data-en="Lost Income" data-es="Pérdida de ingresos">Lost Income</h3>
+      <p data-en="Empty stations, slower service, missed orders, or overtime costs. The hit shows up on the day’s numbers." data-es="Estaciones vacías, servicio más lento, pedidos perdidos o costos de horas extra. El golpe aparece en los números del día.">Empty stations, slower service, missed orders, or overtime costs. The hit shows up on the day’s numbers.</p>
+    </div>
+  </div>
+  <div class="geo-note" style="margin-top:28px;">
+    <strong data-en="The snowball effect" data-es="El efecto bola de nieve">The snowball effect</strong><br>
+    <span data-en="One missed shift leads to overtime or understaffing → stressed team → more call-ins → lower output and revenue. SickPick breaks the cycle: pick a qualified local replacement in minutes before the damage spreads." data-es="Un turno perdido lleva a horas extra o falta de personal → equipo estresado → más llamadas → menor producción e ingresos. SickPick rompe el ciclo: elige un reemplazo local calificado en minutos antes de que el daño se extienda.">One missed shift leads to overtime or understaffing → stressed team → more call-ins → lower output and revenue. SickPick breaks the cycle: pick a qualified local replacement in minutes before the damage spreads.</span>
+  </div>
+  <div class="cta-row" style="margin-top:28px;">
+    <a href="#managers" class="btn btn-primary" data-en="Pick a Replacement Now" data-es="Elige un reemplazo ahora">Pick a Replacement Now</a>
+    <a href="#pricing" class="btn btn-secondary" data-en="See Manager Pricing" data-es="Ver precios para gerentes">See Manager Pricing</a>
+  </div>
+</section>
+
+<section id="profiles">
+  <h2 data-en="How Profiles Look" data-es="Cómo se ven los perfiles">How Profiles Look</h2>
+  <p class="section-sub" data-en="Clean, resume-style cards managers can scan quickly. Seekers control what they show." data-es="Tarjetas limpias estilo currículum que los gerentes pueden escanear rápidamente. Los buscadores controlan lo que muestran.">Clean, resume-style cards managers can scan quickly. Seekers control what they show.</p>
+  <div class="mock-grid">
+    <div>
+      <img src="imagine_images/4H32z.jpg" alt="Example job seeker profile card" class="mock-img">
+    </div>
+    <div>
+      <div class="card">
+        <h3 data-en="Seeker Profile" data-es="Perfil de buscador">Seeker Profile</h3>
+        <p data-en="Name, role + years, distance, skills tags, reliability notes, and optional certifications. Managers see the closest qualified people first." data-es="Nombre, puesto + años, distancia, etiquetas de habilidades, notas de confiabilidad y certificaciones opcionales. Los gerentes ven primero a las personas calificadas más cercanas.">Name, role + years, distance, skills tags, reliability notes, and optional certifications. Managers see the closest qualified people first.</p>
+      </div>
+      <div class="card" style="margin-top:16px;">
+        <h3 data-en="Employed Worker" data-es="Trabajador empleado">Employed Worker</h3>
+        <p data-en="Same format, plus the option to post a planned sick day so a replacement can be lined up in advance." data-es="Mismo formato, más la opción de publicar un día de enfermedad planificado para que un reemplazo pueda prepararse con anticipación.">Same format, plus the option to post a planned sick day so a replacement can be lined up in advance.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <h2 data-en="Simple Pricing for Managers" data-es="Precios simples para gerentes">Simple Pricing for Managers</h2>
+  <p class="section-sub" data-en="No markup on wages. Pay for access to the local board of workers." data-es="Sin margen sobre salarios. Paga por acceso al tablero local de trabajadores.">No markup on wages. Pay for access to the local board of workers.</p>
+  <div class="pricing-grid">
+    <div class="price-card featured">
+      <h3 data-en="Manager Access" data-es="Acceso de gerente">Manager Access</h3>
+      <div class="price">$39<span>/mo</span></div>
+      <p data-en="Unlimited picks. Filter by distance and experience. Ideal for locations with regular call-ins." data-es="Elecciones ilimitadas. Filtra por distancia y experiencia. Ideal para ubicaciones con llamadas regulares.">Unlimited picks. Filter by distance and experience. Ideal for locations with regular call-ins.</p>
+    </div>
+    <div class="price-card">
+      <h3 data-en="Per-Pick Option" data-es="Opción por elección">Per-Pick Option</h3>
+      <div class="price">$25<span>/pick</span></div>
+      <p data-en="No monthly fee. Pay only when you pick a worker for a shift. Ideal for occasional needs." data-es="Sin tarifa mensual. Paga solo cuando eliges un trabajador para un turno. Ideal para necesidades ocasionales.">No monthly fee. Pay only when you pick a worker for a shift. Ideal for occasional needs.</p>
+    </div>
+  </div>
+  <div class="geo-note">
+    <strong data-en="Geolocation matching" data-es="Coincidencia por geolocalización">Geolocation matching</strong><br>
+    <span data-en="Managers see workers sorted by distance first. Filter by miles, role, and experience so the closest qualified person appears at the top of the yellow-tag board. Location is used only for matching — seekers control visibility." data-es="Los gerentes ven a los trabajadores ordenados por distancia primero. Filtra por millas, puesto y experiencia para que la persona calificada más cercana aparezca arriba en el tablero de etiquetas amarillas. La ubicación se usa solo para emparejar — los buscadores controlan la visibilidad.">Managers see workers sorted by distance first. Filter by miles, role, and experience so the closest qualified person appears at the top of the yellow-tag board. Location is used only for matching — seekers control visibility.</span>
+  </div>
+  <div class="geo-note">
+    <strong data-en="Direct model" data-es="Modelo directo">Direct model</strong><br>
+    <span data-en="SickPick does not take a cut of wages. Managers and workers handle pay directly (or through their preferred method). Platform fee is only for access to the matching board." data-es="SickPick no toma un porcentaje de los salarios. Los gerentes y trabajadores manejan el pago directamente (o a través de su método preferido). La tarifa de la plataforma es solo por acceso al tablero de coincidencias.">SickPick does not take a cut of wages. Managers and workers handle pay directly (or through their preferred method). Platform fee is only for access to the matching board.</span>
+  </div>
+</section>
+
+<section id="seekers">
+  <h2 data-en="Profiles for Everyone" data-es="Perfiles para todos">Profiles for Everyone</h2>
+  <div class="cards">
+    <div class="card">
+      <h3 data-en="Job Seekers" data-es="Buscadores de empleo">Job Seekers</h3>
+      <p data-en="Build a short profile once. Managers nearby can find and pick you for shifts that match your experience." data-es="Construye un perfil corto una vez. Los gerentes cercanos pueden encontrarte y elegirte para turnos que coincidan con tu experiencia.">Build a short profile once. Managers nearby can find and pick you for shifts that match your experience.</p>
+    </div>
+    <div class="card">
+      <h3 data-en="Employed Workers" data-es="Trabajadores empleados">Employed Workers</h3>
+      <p data-en="Share your experience or post your own planned sick day so a replacement is ready instead of last-minute chaos." data-es="Comparte tu experiencia o publica tu propio día de enfermedad planificado para que un reemplazo esté listo en lugar del caos de último minuto.">Share your experience or post your own planned sick day so a replacement is ready instead of last-minute chaos.</p>
+    </div>
+    <div class="card" id="managers">
+      <h3 data-en="Managers & Owners" data-es="Gerentes y dueños">Managers & Owners</h3>
+      <p data-en="Filter the yellow-tag board by distance and experience. Pick the best available person for the shift." data-es="Filtra el tablero de etiquetas amarillas por distancia y experiencia. Elige a la mejor persona disponible para el turno.">Filter the yellow-tag board by distance and experience. Pick the best available person for the shift.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 data-en="Built for Real Use" data-es="Hecho para uso real">Built for Real Use</h2>
+  <div class="features">
+    <div class="feature">
+      <strong data-en="Geolocation" data-es="Geolocalización">Geolocation</strong>
+      <span data-en="Workers sorted by distance from your location." data-es="Trabajadores ordenados por distancia desde tu ubicación.">Workers sorted by distance from your location.</span>
+    </div>
+    <div class="feature">
+      <strong data-en="Spanish Toggle" data-es="Interruptor de español">Spanish Toggle</strong>
+      <span data-en="Full site in English or Spanish." data-es="Sitio completo en inglés o español.">Full site in English or Spanish.</span>
+    </div>
+    <div class="feature">
+      <strong data-en="Yellow Tag Board" data-es="Tablero de etiquetas amarillas">Yellow Tag Board</strong>
+      <span data-en="Visual, scannable list of people ready to pick." data-es="Lista visual y escaneable de personas listas para elegir.">Visual, scannable list of people ready to pick.</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>SickPick.org — Pick the right person when someone calls in sick.</p>
+  <p style="margin-top:8px;">Direct matching. No high staffing markups.</p>
+</footer>
+
+<script>
+  const btn = document.getElementById('langBtn');
+  let lang = 'en';
+  btn.addEventListener('click', () => {
+    lang = lang === 'en' ? 'es' : 'en';
+    btn.textContent = lang === 'en' ? 'ES' : 'EN';
+    document.querySelectorAll('[data-en]').forEach(el => {
+      el.innerHTML = el.getAttribute('data-' + lang);
+    });
+  });
+</script>
+</body>
+</html>
